@@ -149,10 +149,8 @@ services:
           property: host
 
   # 9. Frontend (Static Site)
-  - type: web
+  - type: static
     name: frontend-service
-    env: static
-    plan: free
     rootDir: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main
     buildCommand: npm run build
     publishDir: dist
