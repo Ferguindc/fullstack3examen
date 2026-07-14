@@ -5,8 +5,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/microservicios_auth_user-main/auth_user_services/AuthService
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
@@ -19,8 +19,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/microservicios_auth_user-main/auth_user_services/UserService
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
@@ -33,8 +33,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/sanosysalvos-geoservice-main
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn geo_service.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn geo_service.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
@@ -61,8 +61,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/MatchService-main
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn match_service_project.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn match_service_project.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
@@ -77,8 +77,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/Media-Service-main
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn media_service.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn media_service.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
@@ -91,8 +91,8 @@ services:
     env: python
     plan: free
     rootDir: PROYECTO-fullsatck-3-main/apis/NotificacionesServices-main
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn notification_service.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: pip install -r requirements.txt gunicorn
+    startCommand: python -m gunicorn notification_service.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
         value: "True"
