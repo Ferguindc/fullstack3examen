@@ -1,0 +1,186 @@
+services:
+  # 1. Auth Service
+  - type: web
+    name: auth-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/microservicios_auth_user-main/auth_user_services/AuthService
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 2. User Service
+  - type: web
+    name: user-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/microservicios_auth_user-main/auth_user_services/UserService
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 3. Geo Service
+  - type: web
+    name: geo-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/sanosysalvos-geoservice-main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn geo_service.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 4. Chat Service (ASGI)
+  - type: web
+    name: chat-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/chat-services-main
+    buildCommand: pip install -r requirements.txt
+    startCommand: daphne -b 0.0.0.0 -p $PORT chat_service_proj.asgi:application
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 5. Match Service
+  - type: web
+    name: match-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/MatchService-main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn match_service_project.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+      - key: GOOGLE_GENAI_API_KEY
+        value: "tu_api_key_aqui"
+
+  # 6. Media Service
+  - type: web
+    name: media-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/Media-Service-main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn media_service.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 7. Notification Service
+  - type: web
+    name: notification-service
+    env: python
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/apis/NotificacionesServices-main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn notification_service.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: "True"
+      - key: SECRET_KEY
+        value: "django-insecure-sanos-y-salvos-dev-key"
+
+  # 8. BFF (Backend for Frontend)
+  - type: web
+    name: bff-service
+    env: node
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main/backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BFF_PORT
+        value: "10000"
+      - key: AUTH_SERVICE_URL
+        fromService:
+          type: web
+          name: auth-service
+          property: host
+      - key: USER_SERVICE_URL
+        fromService:
+          type: web
+          name: user-service
+          property: host
+      - key: GEO_SERVICE_URL
+        fromService:
+          type: web
+          name: geo-service
+          property: host
+      - key: CHAT_SERVICE_URL
+        fromService:
+          type: web
+          name: chat-service
+          property: host
+      - key: MATCH_SERVICE_URL
+        fromService:
+          type: web
+          name: match-service
+          property: host
+      - key: MEDIA_SERVICE_URL
+        fromService:
+          type: web
+          name: media-service
+          property: host
+      - key: NOTIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: notification-service
+          property: host
+
+  # 9. Frontend (Static Site)
+  - type: web
+    name: frontend-service
+    env: static
+    plan: free
+    rootDir: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main
+    buildCommand: npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_AUTH_SERVICE_URL
+        fromService:
+          type: web
+          name: auth-service
+          property: host
+      - key: VITE_USER_SERVICE_URL
+        fromService:
+          type: web
+          name: user-service
+          property: host
+      - key: VITE_BFF_URL
+        fromService:
+          type: web
+          name: bff-service
+          property: host
+      - key: VITE_API_URL
+        value: ${VITE_BFF_URL}/api
+      - key: VITE_GEO_SERVICE_URL
+        value: ${VITE_BFF_URL}/api
+      - key: VITE_CHAT_WS_URL
+        value: ${VITE_BFF_URL}
+      - key: VITE_MAPBOX_TOKEN
+        value: "pk.xxx"
+      - key: VITE_APP_NAME
+        value: "Sanos y Salvos"
+      - key: VITE_APP_VERSION
+        value: "1.0.0"
