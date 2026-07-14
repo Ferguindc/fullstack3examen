@@ -152,7 +152,6 @@ services:
   - type: web
     name: frontend-service
     env: static
-    plan: free
     rootDir: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main
     buildCommand: npm run build
     staticPublishPath: dist
