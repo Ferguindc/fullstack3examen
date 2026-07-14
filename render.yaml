@@ -154,7 +154,7 @@ services:
     env: static
     rootDir: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main
     buildCommand: npm run build
-    staticPublishPath: PROYECTO-fullsatck-3-main/frontend_sanos_y_salvos-main/dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_AUTH_SERVICE_URL
         fromService:
